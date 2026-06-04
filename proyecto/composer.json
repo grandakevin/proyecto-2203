@@ -1,0 +1,11 @@
+{
+    "name": "tu-usuario/mi-proyecto-mvc",
+    "description": "Estructura básica MVC en PHP",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "require": {}
+}

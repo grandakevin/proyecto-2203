@@ -1,0 +1,51 @@
+-- SQL para crear la tabla de líneas de investigación
+CREATE TABLE IF NOT EXISTS linea_investigacion (
+    idLineaInvestigacion INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    descripcion TEXT NULL,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Inserción inicial de líneas de investigación
+INSERT INTO linea_investigacion (nombre, descripcion)
+SELECT * FROM (SELECT 'Desarrollo de Software Sociotecnológico' AS nombre, 'Proyectos orientados al diseño e implementación de soluciones de software para comunidades.' AS descripcion) AS tmp
+WHERE NOT EXISTS (SELECT 1 FROM linea_investigacion LIMIT 1);
+
+INSERT INTO linea_investigacion (nombre, descripcion)
+SELECT * FROM (SELECT 'Gestión y Participación Comunitaria' AS nombre, 'Estudios y propuestas que fortalecen la interacción entre universidad y comunidad.' AS descripcion) AS tmp
+WHERE NOT EXISTS (SELECT 1 FROM linea_investigacion WHERE nombre = 'Gestión y Participación Comunitaria');
+
+INSERT INTO linea_investigacion (nombre, descripcion)
+SELECT * FROM (SELECT 'Innovación y Tecnología Social' AS nombre, 'Investigación sobre tecnologías apropiadas para contextos sociales.' AS descripcion) AS tmp
+WHERE NOT EXISTS (SELECT 1 FROM linea_investigacion WHERE nombre = 'Innovación y Tecnología Social');
+
+-- SQL para crear la tabla proyecto
+CREATE TABLE IF NOT EXISTS proyecto (
+    idProyecto INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    objetivoGeneral TEXT NOT NULL,
+    descripcion TEXT NULL,
+    idLineaInvestigacion INT NULL,
+    trayecto VARCHAR(100) NULL,
+    tutor VARCHAR(255) NULL,
+    docenteFormador VARCHAR(255) NULL,
+    comunidad VARCHAR(255) NOT NULL,
+    fechaInicio DATE NOT NULL,
+    fechaFin DATE NULL,
+    estado VARCHAR(50) NOT NULL DEFAULT 'Activo',
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (idLineaInvestigacion) REFERENCES linea_investigacion(idLineaInvestigacion) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- SQL para crear la tabla proyectista
+CREATE TABLE IF NOT EXISTS proyectista (
+    idProyectista INT AUTO_INCREMENT PRIMARY KEY,
+    idProyecto INT NOT NULL,
+    cedula VARCHAR(50) NOT NULL,
+    nombre VARCHAR(255) NOT NULL,
+    apellido VARCHAR(255) NOT NULL,
+    correo VARCHAR(255) NOT NULL,
+    telefono VARCHAR(100) NULL,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (idProyecto) REFERENCES proyecto(idProyecto) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
