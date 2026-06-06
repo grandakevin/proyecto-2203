@@ -253,8 +253,8 @@ class ProyectoController {
                 exit;
             }
 
-            $actualizado = $this->proyectista->actualizar($idProyectista, $datos);
-            if ($actualizado) {
+            $guardado = $this->proyectista->actualizar($idProyectista, $datos);
+            if ($guardado) {
                 $_SESSION['success'] = 'Integrante actualizado correctamente.';
                 header('Location: ?url=proyecto/integrantes/' . $idProyecto);
                 exit;
@@ -400,5 +400,111 @@ class ProyectoController {
 
         header('Location: ?url=proyecto/index');
         exit;
+    }
+
+    // ==========================================
+    //       MÓDULO DE COMUNIDADES (CRUD)
+    // ==========================================
+
+    // 1. Listar Comunidades (La Tabla)
+    public function comunidades_index() {
+        require_once __DIR__ . '/../Models/ComunidadModel.php';
+        $comunidadModelo = new \App\Models\ComunidadModel();
+        $comunidades = $comunidadModelo->obtenerComunidades();
+        
+        include __DIR__ . '/../Views/layouts/header.php';
+        include __DIR__ . '/../Views/layouts/sidebar.php';
+        include __DIR__ . '/../Views/comunidades/comunidades.php';
+        include __DIR__ . '/../Views/layouts/footer.php';
+    }
+
+    // 2. Mostrar el Formulario en pantalla
+    public function comunidades_crear() {
+        include __DIR__ . '/../Views/layouts/header.php';
+        include __DIR__ . '/../Views/layouts/sidebar.php';
+        include __DIR__ . '/../Views/comunidades/insertar.php';
+        include __DIR__ . '/../Views/layouts/footer.php';
+    }
+
+    // 3. Procesar el envío del Formulario (POST)
+    public function comunidades_guardar() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nombre = trim($_POST['nombre'] ?? '');
+            $direccion = trim($_POST['direccion'] ?? '');
+            $tipo_comunidad = trim($_POST['tipo_comunidad'] ?? 'Urbana');
+
+            if ($nombre !== '' && $direccion !== '') {
+                require_once __DIR__ . '/../Models/ComunidadModel.php';
+                $comunidadModelo = new \App\Models\ComunidadModel();
+                
+                $resultado = $comunidadModelo->insertarComunidad($nombre, $direccion, $tipo_comunidad);
+                if ($resultado) {
+                    $_SESSION['success'] = 'Comunidad guardada correctamente.';
+                    header("Location: ?url=proyecto/comunidades_index");
+                    exit();
+                }
+            }
+            $_SESSION['error'] = 'El nombre y la dirección son obligatorios.';
+        }
+        header("Location: ?url=proyecto/comunidades_crear");
+        exit();
+    }
+
+    // 4. Editar Comunidad
+    public function comunidades_editar($id = null) {
+        if ($id === null) {
+            $id = $_GET['id'] ?? 0;
+        }
+        $id = intval($id);
+        
+        require_once __DIR__ . '/../Models/ComunidadModel.php';
+        $comunidadModelo = new \App\Models\ComunidadModel();
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nombre = trim($_POST['nombre'] ?? '');
+            $direccion = trim($_POST['direccion'] ?? '');
+            $tipo_comunidad = trim($_POST['tipo_comunidad'] ?? 'Urbana');
+
+            if ($id > 0 && $nombre !== '' && $direccion !== '') {
+                $comunidadModelo->actualizarComunidad($id, $nombre, $direccion, $tipo_comunidad);
+                $_SESSION['success'] = 'Comunidad actualizada correctamente.';
+                header("Location: ?url=proyecto/comunidades_index");
+                exit();
+            }
+            $_SESSION['error'] = 'Datos inválidos para actualizar.';
+        }
+
+        $comunidad = $comunidadModelo->obtenerComunidadPorId($id);
+        if (!$comunidad) {
+            $_SESSION['error'] = 'Comunidad no encontrada.';
+            header("Location: ?url=proyecto/comunidades_index");
+            exit();
+        }
+
+        include __DIR__ . '/../Views/layouts/header.php';
+        include __DIR__ . '/../Views/layouts/sidebar.php';
+        include __DIR__ . '/../Views/comunidades/editar.php';
+        include __DIR__ . '/../Views/layouts/footer.php';
+    }
+
+    // 5. Eliminar Comunidad
+    public function comunidades_eliminar($id = null) {
+        if ($id === null) {
+            $id = $_GET['id'] ?? 0;
+        }
+        $id = intval($id);
+        
+        if ($id > 0) {
+            require_once __DIR__ . '/../Models/ComunidadModel.php';
+            $comunidadModelo = new \App\Models\ComunidadModel();
+            
+            if ($comunidadModelo->eliminarComunidad($id)) {
+                $_SESSION['success'] = 'Comunidad eliminada correctamente.';
+            } else {
+                $_SESSION['error'] = 'No se pudo eliminar la comunidad.';
+            }
+        }
+        header("Location: ?url=proyecto/comunidades_index");
+        exit();
     }
 }
