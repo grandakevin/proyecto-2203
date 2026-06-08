@@ -105,7 +105,16 @@ $values = [
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Comunidad <span class="text-danger">*</span></label>
-                        <input type="text" name="comunidad" class="form-control" value="<?= $values['comunidad'] ?>" required>
+                        <select name="comunidad" class="form-select" required>
+                            <option value="">Seleccione una comunidad</option>
+                            <?php if (!empty($comunidades) && is_array($comunidades)): ?>
+                                <?php foreach ($comunidades as $c): ?>
+                                    <option value="<?= htmlspecialchars($c['nombre']) ?>" <?= $values['comunidad'] === $c['nombre'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($c['nombre']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Línea de investigación <span class="text-danger">*</span></label>

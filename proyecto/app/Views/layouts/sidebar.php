@@ -29,7 +29,7 @@
             <li><a href="#"><i class="fa-solid fa-graduation-cap"></i> Líneas de Investigación</a></li>
             <li><a href="#"><i class="fa-solid fa-user-shield"></i> Usuarios</a></li>
             <li><a href="#"><i class="fa-solid fa-file-pdf"></i> Reportes</a></li>
-            <li><a href="#"><i class="fa-solid fa-cloud-arrow-up"></i> Importación de Datos</a></li>
+            <!-- Importación de Datos eliminado temporalmente -->
             <li><a href="#"><i class="fa-solid fa-sliders"></i> Configuración</a></li>
         </ul>
     </div>

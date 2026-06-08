@@ -27,6 +27,10 @@ class ProyectoController {
         $old = $_SESSION['old'] ?? [];
         unset($_SESSION['old']);
         $lineas = $this->lineaInvestigacion->obtenerTodos();
+        // Cargar comunidades para el select
+        require_once __DIR__ . '/../Models/ComunidadModel.php';
+        $comunidadModelo = new \App\Models\ComunidadModel();
+        $comunidades = $comunidadModelo->obtenerComunidades();
         include __DIR__ . '/../Views/proyecto/crear.php';
     }
 
@@ -132,6 +136,10 @@ class ProyectoController {
         unset($_SESSION['old']);
         $lineas = $this->lineaInvestigacion->obtenerTodos();
         $integrantesActuales = $this->proyectista->obtenerPorProyecto($id);
+        // Cargar comunidades para el select
+        require_once __DIR__ . '/../Models/ComunidadModel.php';
+        $comunidadModelo = new \App\Models\ComunidadModel();
+        $comunidades = $comunidadModelo->obtenerComunidades();
         include __DIR__ . '/../Views/proyecto/editar.php';
     }
 

@@ -1,0 +1,30 @@
+<?php
+include __DIR__ . '/../layouts/header.php';
+include __DIR__ . '/../layouts/sidebar.php';
+
+$success = $_SESSION['success'] ?? null;
+$error = $_SESSION['error'] ?? null;
+unset($_SESSION['success'], $_SESSION['error']);
+
+$old = $old ?? [];
+$proyecto = $proyecto ?? [];
+$lineas = $lineas ?? [];
+$integrantesActuales = $integrantesActuales ?? [];
+$integrantesOld = $old['integrantes'] ?? [];
+
+$values = [
+    'titulo' => htmlspecialchars($old['titulo'] ?? ($proyecto['titulo'] ?? '')),
+    'objetivoGeneral' => htmlspecialchars($old['objetivoGeneral'] ?? ($proyecto['objetivoGeneral'] ?? '')),
+    'descripcion' => htmlspecialchars($old['descripcion'] ?? ($proyecto['descripcion'] ?? '')),
+    'comunidad' => htmlspecialchars($old['comunidad'] ?? ($proyecto['comunidad'] ?? '')),
+    'idLineaInvestigacion' => htmlspecialchars($old['idLineaInvestigacion'] ?? ($proyecto['idLineaInvestigacion'] ?? '')),
+    'trayecto' => htmlspecialchars($old['trayecto'] ?? ($proyecto['trayecto'] ?? '')),
+    'tutor' => htmlspecialchars($old['tutor'] ?? ($proyecto['tutor'] ?? '')),
+    'docenteFormador' => htmlspecialchars($old['docenteFormador'] ?? ($proyecto['docenteFormador'] ?? '')),
+    'fechaInicio' => htmlspecialchars($old['fechaInicio'] ?? ($proyecto['fechaInicio'] ?? '')),
+    'fechaFin' => htmlspecialchars($old['fechaFin'] ?? ($proyecto['fechaFin'] ?? '')),
+    'estado' => htmlspecialchars($old['estado'] ?? ($proyecto['estado'] ?? '')),
+];
+?>
+
+<div class="container-fluid py-4">
